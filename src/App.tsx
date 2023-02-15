@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useThrottledSearch from "./hooks/useThrottledSearch";
-import './App.css'
+import "./App.css";
 
 function App() {
   const [query, setQuery] = useState<string>("");
@@ -23,23 +23,24 @@ function App() {
       <ul className="result-list">
         {results.map((result, i) => (
           <li className="result-item" key={result.id}>
-            <a href={result.html_url}>{`${i+1}. ${result.name}`}</a>
+            <a href={result.html_url}>{`${i + 1}. ${result.name}`}</a>
             <p>{result.description}</p>
           </li>
         ))}
       </ul>
-      <div>
-        <button onClick={prevPage} disabled={page === 1}>
-          Previous Page
-        </button>
-        <span>Page {page}</span>
-        <button onClick={nextPage} disabled={results.length === 0}>
-          Next Page
-        </button>
-      </div>
+      {results.length === 30 && (
+        <div>
+          <button onClick={prevPage} disabled={page === 1}>
+            Previous Page
+          </button>
+          <span>Page {page}</span>
+          <button onClick={nextPage}>
+            Next Page
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 
 export default App;
-
