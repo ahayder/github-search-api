@@ -1,5 +1,6 @@
 {
-  "name": "tstut",
+  "name": "github-repo-api",
+  "author": "Ali Hayder",
   "private": true,
   "version": "0.0.0",
   "type": "module",
