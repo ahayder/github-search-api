@@ -13,6 +13,7 @@ type SearchResponse = {
 }
 
 const THROTTLE_INTERVEL = 500;
+const API_URL = "https://api.github.com/search/repositories";
 
 const useThrottledSearch = () => {
   const [query, setQuery] = useState<string>("");
@@ -36,7 +37,7 @@ const useThrottledSearch = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`https://api.github.com/search/repositories?q=${searchQuery}&page=${pageNum}`);
+      const response = await fetch(`${API_URL}?q=${searchQuery}&page=${pageNum}`);
       const data: SearchResponse = await response.json();
 
       setResults(data.items);
