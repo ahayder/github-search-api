@@ -8,7 +8,7 @@
 .search-container {
   width: 80%;
   display: flex;
-  margin-bottom: 1rem;
+  margin: 1rem 0 0 1rem;
 }
 
 .search-input {
