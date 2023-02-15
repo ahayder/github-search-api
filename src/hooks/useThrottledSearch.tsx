@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-
-type SearchResult = {
-  id: number;
-  name: string;
-  html_url: string;
-  description: string;
-}
+import { SearchResult } from "../types";
 
 type SearchResponse = {
   items: SearchResult[];
@@ -18,7 +12,7 @@ const API_URL = "https://api.github.com/search/repositories";
 const useThrottledSearch = () => {
   const [query, setQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [results, setResults] = useState<SearchResult[]>([]);
+  const [result, setResult] = useState<SearchResponse>({} as SearchResponse);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
 
@@ -40,10 +34,10 @@ const useThrottledSearch = () => {
       const response = await fetch(`${API_URL}?q=${searchQuery}&page=${pageNum}`);
       const data: SearchResponse = await response.json();
 
-      setResults(data.items);
+      setResult(data);
       setTotalPages(Math.ceil(data.total_count / 30));
     } catch (error) {
-      console.error("Error fetching search results:", error);
+      console.error("Error fetching search result:", error);
     }
 
     setIsLoading(false);
@@ -69,7 +63,7 @@ const useThrottledSearch = () => {
     }
   };
 
-  return { results, isLoading, search, nextPage, prevPage, page };
+  return { result, isLoading, search, nextPage, prevPage, page };
 };
 
 export default useThrottledSearch;
