@@ -12,12 +12,20 @@ type SearchResponse = {
   total_count: number;
 }
 
+const THROTTLE_INTERVEL = 500;
+
 const useThrottledSearch = () => {
   const [query, setQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
+
+  useEffect(() => {
+    if (query) {
+      throttledSearch(query, page);
+    }
+  }, [query, page]);
 
   const search = (newQuery: string) => {
     setQuery(newQuery);
@@ -32,7 +40,7 @@ const useThrottledSearch = () => {
       const data: SearchResponse = await response.json();
 
       setResults(data.items);
-      setTotalPages(Math.ceil(data.total_count / 10));
+      setTotalPages(Math.ceil(data.total_count / 30));
     } catch (error) {
       console.error("Error fetching search results:", error);
     }
@@ -43,7 +51,7 @@ const useThrottledSearch = () => {
   const throttledSearch = (searchQuery: string, pageNum: number) => {
     setTimeout(() => {
       doSearch(searchQuery, pageNum);
-    }, 500);
+    }, THROTTLE_INTERVEL);
   };
 
   const nextPage = () => {
@@ -59,12 +67,6 @@ const useThrottledSearch = () => {
       throttledSearch(query, page - 1);
     }
   };
-
-  useEffect(() => {
-    if (query) {
-      throttledSearch(query, page);
-    }
-  }, [query, page]);
 
   return { results, isLoading, search, nextPage, prevPage, page };
 };
