@@ -4,10 +4,10 @@ import { SearchResult } from "../types";
 type SearchResponse = {
   items: SearchResult[];
   total_count: number;
-}
+};
 
-const THROTTLE_INTERVEL = 500;
 const API_URL = "https://api.github.com/search/repositories";
+const THROTTLE_DELAY = 500;
 
 const useThrottledSearch = () => {
   const [query, setQuery] = useState<string>("");
@@ -44,9 +44,14 @@ const useThrottledSearch = () => {
   };
 
   const throttledSearch = (searchQuery: string, pageNum: number) => {
-    setTimeout(() => {
+    let timer = true;
+    if(timer){
+      timer = false;
       doSearch(searchQuery, pageNum);
-    }, THROTTLE_INTERVEL);
+      setTimeout(() => {
+        timer = true;
+      }, THROTTLE_DELAY)
+    }
   };
 
   const nextPage = () => {
