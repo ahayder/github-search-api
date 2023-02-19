@@ -43,6 +43,7 @@ const useThrottledSearch = () => {
     setIsLoading(false);
   };
 
+  // throttle implementation
   const throttledSearch = (searchQuery: string, pageNum: number) => {
     let timer = true;
     if(timer){
